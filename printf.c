@@ -864,7 +864,9 @@ int printf_(const char* format, ...)
   va_list va;
   va_start(va, format);
   char buffer[1];
+  _printf_mutex_acquire();
   const int ret = _vsnprintf(_out_char, buffer, (size_t)-1, format, va);
+  _printf_mutex_release();
   va_end(va);
   return ret;
 }
@@ -893,7 +895,10 @@ int snprintf_(char* buffer, size_t count, const char* format, ...)
 int vprintf_(const char* format, va_list va)
 {
   char buffer[1];
-  return _vsnprintf(_out_char, buffer, (size_t)-1, format, va);
+  _printf_mutex_acquire();
+  const int ret = _vsnprintf(_out_char, buffer, (size_t)-1, format, va);
+  _printf_mutex_release();
+  return ret;
 }
 
 
@@ -912,3 +917,8 @@ int fctprintf(void (*out)(char character, void* arg), void* arg, const char* for
   va_end(va);
   return ret;
 }
+
+///////////////////////////////////////////////////////////////////////////////
+
+inline __attribute__((weak)) void _printf_mutex_acquire(void){}
+inline __attribute__((weak)) void _printf_mutex_release(void){}
