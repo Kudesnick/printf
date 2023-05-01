@@ -52,8 +52,8 @@ void _putchar(char character);
  * Acquire a mutex to prevent line breaks in multithreaded systems.
  * The function must be redefined according to the OS being used.
  */
-
 void _printf_mutex_acquire(void);
+
 /**
  * Release the mutex previously acquired by function '_printf_mutex_acquire'.
  * The function must be redefined according to the OS being used.
